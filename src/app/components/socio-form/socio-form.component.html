@@ -1,0 +1,95 @@
+
+<div class="row">
+  <h3>GESTION DE SOCIOS</h3>
+
+  <form #socioForm="ngForm" class="col-md-8">
+    <div class="mb-3">
+      <label for="idapellido" class="form-label">Apellido</label>
+      <input type="text" class="form-control form-control-sm" id="idapellido"
+       [(ngModel)]="socio.apellido" name="apellido" required #apellido="ngModel" caracter-especial>
+  
+       <div *ngIf="apellido.invalid && (apellido.dirty || apellido.touched)"
+        class="alert alert-danger">
+      
+        <div *ngIf="apellido.errors?.['required']">
+          Apellido es requerido.
+        </div>
+  
+        <div *ngIf="apellido.errors?.['caracterEspecial']">
+          No se permiten caracteres especiales.
+        </div>
+  
+       </div>
+  
+    </div>
+    <div class="mb-3">
+      <label for="idnombre" class="form-label">Nombre</label>
+      <input type="text" class="form-control form-control-sm" id="idnombre"
+       [(ngModel)]="socio.nombres" name="nombres" required #nombres="ngModel" pattern="">
+  
+       <div *ngIf="nombres.invalid && (nombres.dirty || nombres.touched)"
+        class="alert alert-danger">
+      
+        <div *ngIf="nombres.errors?.['required']">
+          Nombres es requerido.
+        </div>
+  
+       </div>
+  
+  
+    </div>
+    <div class="mb-3">
+      <label for="iddni" class="form-label">DNI</label>
+      <input type="number" class="form-control form-control-sm" id="iddni" 
+      [(ngModel)]="socio.dni" name="dni" required #dni="ngModel">
+  
+      <div *ngIf="dni.invalid && (dni.dirty || dni.touched)"
+        class="alert alert-danger">
+          <div *ngIf="dni.errors?.['required']">
+            Dni es requerido.
+          </div>
+      </div>    
+  
+    </div>
+    <div class="mb-3">
+      <label for="idemail" class="form-label">Email</label>
+      <input type="email" class="form-control form-control-sm" id="idemail" minlength="5"
+      [(ngModel)]="socio.email" name="email" required #email="ngModel" [email]="true">
+  
+      <div *ngIf="email.invalid && (email.dirty || email.touched)"
+        class="alert alert-danger">
+          <div *ngIf="email.errors?.['required']">
+            Email es requerido.
+          </div>
+  
+          <div *ngIf="email.errors?.['minlength']">
+            El email debe tener al menos 5 caracteres
+          </div>
+  
+          <div *ngIf="email.errors?.['email']">
+            El email debe estar formateado correctamente
+          </div>
+      </div> 
+  
+    </div>
+  
+    <div class="mb-3 form-check">
+      <input type="checkbox" class="form-check-input" id="idactivo"
+      [(ngModel)]="socio.activo" name="activo">
+      <label class="form-check-label" for="idactivo">Activo?</label>
+    </div>
+    <button *ngIf="accion=='new'" type="submit" (click)="registrar()" class="btn btn-primary"
+      [disabled]="socioForm.invalid">
+      Registrar
+    </button>
+    <button *ngIf="accion=='update'" type="submit" (click)="modificarSocio()" class="btn btn-secondary">Modificar</button>
+  
+  </form>
+  <div class="col-md-4">
+    <div>Datos en el Formulario: {{socioForm.value | json}}</div>
+    <div>Estado del Formulario: {{socioForm.status}}  {{socioForm.invalid}}</div>
+    <div>Estado de la caja apellido: {{apellido.status}}</div>
+    <div>Errores en la caja apellido: {{apellido.errors | json}}</div>
+  </div>
+
+</div>

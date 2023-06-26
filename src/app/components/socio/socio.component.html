@@ -1,0 +1,30 @@
+<h3>LISTADO DE SOCIOS</h3>
+<button class="btn btn-primary" (click)="agregarSocio()">AGREGAR</button>
+<table class="table">
+  <thead>
+    <tr>
+      <th scope="col">#Id</th>
+      <th scope="col">Apellido</th>
+      <th scope="col">Nombres</th>
+      <th scope="col">Email</th>
+
+      <th scope="col">activo?</th>
+      <th scope="col">Acciones</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let s of socios">
+      <th scope="row">{{s._id}}</th>
+      <td>{{s.apellido}}</td>
+      <td>{{s.nombres}}</td>
+      <td>{{s.email}}</td>
+
+      <td>{{s.activo}}</td>
+      <td>
+        <button class="btn btn-success" (click)="modificarSocio(s)">MODIFICAR</button>
+        <button class="btn btn-danger" (click)="eliminarSocio(s)">ELIMINAR</button>
+
+      </td>
+    </tr>
+  </tbody>
+</table>

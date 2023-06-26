@@ -1,0 +1,91 @@
+<div class="card" *ngIf="loginService.userLoggedIn()">
+    <div class="card-header">
+      GESTION DE SECTORES
+    </div>
+    <div class="card-body">
+        <div class="row">
+          <div class="col-md-6">
+            <form>
+              <div class="mb-3">
+                  <label for="idnombre" class="form-label">Nombre</label>
+                  <input name="nombre" type="text" class="form-control" id="idnombre"
+                   [(ngModel)]="sector.nombre">
+                </div>
+                <div class="mb-3">
+                  <label for="idfuncion" class="form-label">Funcion</label>
+                  <textarea name="funcion" class="form-control" id="idfuncion" rows="3"
+                  [(ngModel)]="sector.funcion"   ></textarea>
+                </div>
+                <div class="mb-3">
+                  <label for="idemail" class="form-label">Email</label>
+                  <input name="email" type="email" class="form-control" id="idemail"
+                  [(ngModel)]="sector.email"    >
+                </div>
+                <div class="mb-3">
+                  <label for="idresponsable" class="form-label">Responsable</label>
+                  <select class="form-select" name="responsable" [(ngModel)]="sector.responsable">
+                    <option *ngFor="let agente of agentes" [ngValue]="agente" >{{agente.apellido}}</option>
+                  </select>
+                </div>
+  
+                <button type="button" class="btn btn-primary" (click)="guardarSector()">Guardar</button>              
+                <button type="button" class="btn btn-primary" (click)="actualizarSector()">Actualizar</button>              
+  
+            </form>
+          </div>
+          <div class="col-md-6">
+            <div class="accordion" id="accordionExample" >
+              <div class="accordion-item">
+                <h2 class="accordion-header">
+                  <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                    CONTACTOS
+                  </button>
+                </h2>
+                <div id="collapseOne" class="accordion-collapse collapse show" data-bs-parent="#accordionExample">
+                  <div class="accordion-body">
+                    <form>
+                      <select  [(ngModel)]="contacto.tipo" name="tipocontacto">
+                          <option value="">Elija una opcion</option>
+
+                          <option value="telefono fijo">Telefono Fijo</option>
+                          <option value="telefono celular">Telefono Celular</option>
+                          <option value="email principal ">Email Principal</option>
+                          <option value="email secundario ">Email Secundario</option>
+
+
+                      </select>
+                      <input type="text" [(ngModel)]="contacto.valor" name="valorcontacto" placeholder="Ingrese Valor Contacto"> 
+                      <input type="text" [(ngModel)]="contacto.descripcion" name="descripcioncontacto" placeholder="Ingrese Descripcion Breve"> 
+                      <button (click)="agregarContacto()" class="btn btn-sm btn-primary">AGREGAR</button>
+                    </form>
+                    <table class="table">
+                      <thead>
+                        <tr>
+                          <th scope="col">Tipo</th>
+                          <th scope="col">Valor</th>
+                          <th scope="col">Descripcion</th>
+                          <th scope="col">.</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr *ngFor="let c of sector.contactos">
+                          <th>{{c.tipo}}</th>
+                          <td>{{c.valor}}</td>
+                          <td>{{c.descripcion}}</td>
+                          <td>
+                            <button (click)="eliminarContacto(c)" class="btn btn-sm btn-danger">DEL</button>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+
+          </div>
+        </div>
+
+    </div>
+</div>
