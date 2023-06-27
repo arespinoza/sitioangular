@@ -18,7 +18,7 @@ export class CalendarComponent implements OnInit {
   }
   verEventos(){
     idCalendario:String;
-    let idCalendario = "c_q26mptnlohvd84qnt9q6u9cs0o@group.calendar.google.com";
+    let idCalendario = "c_q26mptnlohvd84qnt9q6u9cs0o";
     this.googleService.getEvents(idCalendario).subscribe(
       result=>{
         this.calendarioGoogle = result;
@@ -28,5 +28,9 @@ export class CalendarComponent implements OnInit {
         console.log(error)
       }
     )
+  }
+
+  verToken(){
+    console.log(this.googleService.getToken())
   }
 }

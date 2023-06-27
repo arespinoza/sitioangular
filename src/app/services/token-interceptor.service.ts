@@ -8,11 +8,21 @@ import { LoginService } from './login.service';
 export class TokenInterceptorService implements HttpInterceptor {
   constructor(private loginService:LoginService) { }
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>>  {
-    const tokenizeReq = req.clone({
-      setHeaders:{
-        Authorization: `Bearer ${this.loginService.getToken()}`
+      if(req.url.indexOf("localhost", 0)>=0){
+        const tokenizeReq = req.clone({
+          setHeaders:{
+            Authorization: `Bearer ${this.loginService.getToken()}`
+          }
+        });
+        return next.handle(tokenizeReq);
+      }else{
+        const tokenizeReq = req.clone({
+          setHeaders:{
+            //Authorization: `Bearer ${this.loginService.getToken()}`
+          }
+        });
+        return next.handle(tokenizeReq);        
       }
-    });
-    return next.handle(tokenizeReq);
+
   }
 }

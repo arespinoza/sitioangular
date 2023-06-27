@@ -6,45 +6,50 @@ import { Observable } from 'rxjs';
 const oAuthConfig: AuthConfig = {
   issuer: 'https://accounts.google.com',
   strictDiscoveryDocumentValidation: false,
-  redirectUri: window.location.origin,
+  redirectUri: "http://localhost:4200/calendar",
   clientId: '951934830450-584dsihp59gb3g6f9eq95tofamtg4693.apps.googleusercontent.com',
-  scope: 'openid profile email'
+  scope: 'openid profile email https://www.googleapis.com/auth/calendar.readonly https://www.googleapis.com/auth/calendar.events'
 }
-
 @Injectable({
   providedIn: 'root'
 })
 export class GoogleService {
 
+  
+
   constructor(private _http:HttpClient,
               private readonly oAuthService: OAuthService) { 
 
-
+                oAuthService.configure(oAuthConfig);
+                oAuthService.loadDiscoveryDocument().then( ()=>{
+                 oAuthService.tryLoginImplicitFlow().then( ()=>{
+                    //oAuthService.loadUserProfile().then( (userProfile)=>{
+                      //console.log(JSON.stringify(userProfile))
+                    //})
+                    if(!oAuthService.hasValidAccessToken()){
+                      console.log("tiene token INVALIDO")
+            
+                      oAuthService.initLoginFlow()
+                      
+                    } else {
+                      console.log("tiene token VALIDO")
+                      sessionStorage.setItem("googleToken", oAuthService.getAccessToken());
+                      oAuthService.loadUserProfile().then( (userProfile)=>{
+                        console.log(JSON.stringify(userProfile))
+                      })
+                    }
+                  })
+                })        
   }
 
   configureGoogleService(){
-    this.oAuthService.configure(oAuthConfig);
-    this.oAuthService.loadDiscoveryDocument().then( ()=>{
-     this.oAuthService.tryLoginImplicitFlow().then( ()=>{
-        if(!this.oAuthService.hasValidAccessToken()){
-          console.log("tiene token INVALIDO")
 
-          this.oAuthService.initLoginFlow()
-        } else {
-          console.log("tiene token VALIDO")
-
-          //oAuthService.loadUserProfile().then( (userProfile)=>{
-            //console.log(JSON.stringify(userProfile))
-          //})
-        }
-      })
-    })
   }
 
   getEvents(idCalendario: string):Observable<any>{
     const httpOptions = {
       headers: new HttpHeaders({
-        "Authorization": "Bearer ya29.a0AWY7Ckle0pQi2AFqtSM9wDV6u4cc2ciHZZR8AgE-IkzQ_MnyQ0s6Ip4nvJaXuqkIDl0qpLDPO_uFBw9fuS0bwN0eSf_ghxEppfmGFoW3r1Qd4Ix_xkH0NhxGf8BZFkTga4n1I9ohe4nOsRpmrD-KWMrFf1QvaCgYKAb8SARISFQG1tDrpuVdmzbc1gM3SfGiV-fkIdw0163",
+        "Authorization": "Bearer " + this.getToken(),
         "Accept": "application/json",
         "Content-Type": "application/json"
       }),
@@ -53,6 +58,7 @@ export class GoogleService {
       //.append("key", "AIzaSyBVDwmGSiRaIoHqpsl9KfnmhfY8Vd34F6w")
     };
 
+    console.log(httpOptions);
     return this._http.get("https://www.googleapis.com/calendar/v3/calendars/"+idCalendario+"@group.calendar.google.com/events", httpOptions);
 
   }
@@ -60,7 +66,7 @@ export class GoogleService {
   createEvent(idCalendario: string, event:any):Observable<any>{
     const httpOptions = {
       headers: new HttpHeaders({
-        "Authorization": "Bearer ya29.a0AWY7CkmXU7ekkxXwBoNqxet32rSOJ_aqlnAQk51JMyw8lZSx1YqyQSvSRGuJW89oRYUCBkl_Ym92diNZPdkQs_nUVGR9wo3OcxS98SKWQThvREUKsg7TSkJQRLCt-VyQko2YXeli7mbfxKBoGbTdHurbUPZzaCgYKARkSARISFQG1tDrpjcH9x3DVzDh5MqR0Xgsc9g0163",
+        "Authorization": "Bearer " + this.getToken(),
         "Accept": "application/json",
         "Content-Type": "application/json"
       }),
@@ -77,6 +83,10 @@ export class GoogleService {
   }
 
 
+  getToken():string{
+    return sessionStorage.getItem("googleToken")!;
+
+  }
 
 
 }
