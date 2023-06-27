@@ -1,6 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { JwksValidationHandler, OAuthService } from 'angular-oauth2-oidc';
-import { authCodeFlowConfig} from './../../sso.config';
 import { GooService } from 'src/app/services/goo.service';
 
 @Component({
@@ -10,41 +8,56 @@ import { GooService } from 'src/app/services/goo.service';
 })
 export class Calendarv2Component implements OnInit {
 
-  claims:any=null;
   calendarioGoogle:any=null;
+  idCalendario:string = "c_q26mptnlohvd84qnt9q6u9cs0o@group.calendar.google.com";
+  
 
-  constructor(private oAuthService:OAuthService,
-              private gooService: GooService) { 
+  fromDate: string="";
+  toDate: string="";
+  event:any = 
+  {
+    kind: "calendar#event",
+    status: "confirmed",
+    summary: "Reunion de prueba desde angular",
+    creator: {
+        "email": "alfredo.espi@gmail.com"
+    },
+
+    start: {
+        dateTime: "2023-06-24T13:30:00-03:00",
+        timeZone: "America/Argentina/Jujuy"
+    },
+
+    end: {
+        dateTime: "2023-06-24T14:30:00-03:00",
+        timeZone: "America/Argentina/Jujuy"
+    }
+}
+
+
+  constructor(private gooService: GooService) { 
   }
 
   ngOnInit(): void {
-    this.configureSingleSignOne();
+    this.gooService.configureSingleSignOne();
 
-  }
-
-  configureSingleSignOne(){
-    this.oAuthService.configure(authCodeFlowConfig);
-    this.oAuthService.loadDiscoveryDocumentAndTryLogin();
   }
 
   login(){
-    this.oAuthService.setupAutomaticSilentRefresh();
-    this.oAuthService.initCodeFlow();
-    sessionStorage.setItem("googleToken", this.oAuthService.getAccessToken())!;
+    this.gooService.login()
 
   }
   
   logout(){
-    this.oAuthService.logOut(); 
+    this.gooService.logout();
   }
 
   verEventos(){
     idCalendario:String;
-    let idCalendario = "c_q26mptnlohvd84qnt9q6u9cs0o";
-    this.gooService.getEvents(idCalendario, this.oAuthService.getAccessToken()).subscribe(
+    this.gooService.getEvents(this.idCalendario).subscribe(
       result=>{
         this.calendarioGoogle = result;
-        console.log(result)
+        alert(JSON.stringify(this.calendarioGoogle))
       },
       error=>{
         console.log(error)
@@ -52,8 +65,47 @@ export class Calendarv2Component implements OnInit {
     )
   }
 
+
+  crearEvento(){
+
+    let fechafrom:Date = new Date(this.fromDate);
+    let fechato:Date = new Date(this.toDate);
+    this.event.start.dateTime = this.toIsoString(fechafrom); 
+    this.event.end.dateTime = this.toIsoString(fechato);
+
+    //pasamos por ahora el JSON event en forma estática
+    this.gooService.createEvent(this.idCalendario, this.event).subscribe(
+      result=>{
+        console.log(result);
+      },
+      error=>{
+        console.log(error);
+      }
+    )
+  }
+
+  //METODO interno que se utiliza para obtener el formato
+  //que se requiere en la API de google Calendar. Ej. 2022-06-20T17:04:00-03:00
+  toIsoString(date:Date) {
+    var tzo = -date.getTimezoneOffset(),
+        dif = tzo >= 0 ? '+' : '-',
+        pad = function(num:any) {
+            return (num < 10 ? '0' : '') + num;
+        };
+  
+    return date.getFullYear() +
+        '-' + pad(date.getMonth() + 1) +
+        '-' + pad(date.getDate()) +
+        'T' + pad(date.getHours()) +
+        ':' + pad(date.getMinutes()) +
+        ':' + pad(date.getSeconds()) +
+        dif + pad(Math.floor(Math.abs(tzo) / 60)) +
+        ':' + pad(Math.abs(tzo) % 60);
+  }
+
   token(){
-    console.log(this.gooService.getToken())
+    console.log(this.gooService.getToken());
+    alert(this.gooService.getToken())
   }
 
 }
