@@ -8,7 +8,6 @@ import { SectorFormComponent } from './components/sector-form/sector-form.compon
 import { LoginComponent } from './components/login/login.component';
 import { HomeComponent } from './components/home/home.component';
 import { CalendarComponent } from './components/calendar/calendar.component';
-import { Calendarv2Component } from './components/calendarv2/calendarv2.component';
 
 const routes: Routes = [
   {path:'home', component:HomeComponent},
@@ -20,7 +19,6 @@ const routes: Routes = [
   {path:'traductor', component:TranslateComponent},
   {path: 'login', component: LoginComponent},
   {path: 'calendar', component: CalendarComponent},   
-  {path: 'calendarv2', component: Calendarv2Component},   
 
 
 ];

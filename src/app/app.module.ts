@@ -24,7 +24,6 @@ import {HTTP_INTERCEPTORS} from '@angular/common/http';
 import { TokenInterceptorService } from './services/token-interceptor.service';
 import { CalendarComponent } from './components/calendar/calendar.component';
 import { OAuthModule } from 'angular-oauth2-oidc';
-import { Calendarv2Component } from './components/calendarv2/calendarv2.component';
 
 
 @NgModule({
@@ -40,9 +39,7 @@ import { Calendarv2Component } from './components/calendarv2/calendarv2.componen
     SectorComponent,
     SectorFormComponent,
     LoginComponent,
-    CalendarComponent,
-    Calendarv2Component,
-
+    CalendarComponent
     
   ],
   imports: [

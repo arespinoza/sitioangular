@@ -5,7 +5,7 @@ export const authCodeFlowConfig: AuthConfig = {
   issuer: 'https://accounts.google.com',
 
   // URL of the SPA to redirect the user to after login
-  redirectUri: window.location.origin + '/calendarv2',
+  redirectUri: window.location.origin + '/calendar',
 
   // The SPA's id. The SPA is registerd with this id at the auth-server
   // clientId: 'server.code',
@@ -15,7 +15,7 @@ export const authCodeFlowConfig: AuthConfig = {
   // is a sign that the auth server is not configured with SPAs in mind
   // and it might not enforce further best practices vital for security
   // such applications.
-  dummyClientSecret: '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',
+  dummyClientSecret: 'GOCSPX-09sOknvnB_NRAKmS2-H-??????????',
 
   responseType: 'code',
 
