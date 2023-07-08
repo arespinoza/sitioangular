@@ -14,7 +14,23 @@ export class GooService {
 
   configureSingleSignOne(){
     this.oAuthService.configure(authCodeFlowConfig);
-    this.oAuthService.loadDiscoveryDocumentAndTryLogin();
+    //this.oAuthService.loadDiscoveryDocumentAndTryLogin();
+    this.oAuthService.loadDiscoveryDocumentAndTryLogin().then(
+      ()=>{
+        if(this.oAuthService.hasValidAccessToken()){
+          this.oAuthService.loadUserProfile().then((userProfile)=>{
+            let usuarioPerfil:any= userProfile;
+            console.log(usuarioPerfil.info.email);
+            //ya tengo el email de quien se logueo puedo 
+            //llamar desde aqui al loginService.login() para buscar el email en 
+            //la bd y si corresponde para guardar
+            //las credenciales de la persona que se esta logueando
+            //idem de como se lo llama desde el controler de loguin
+
+          })
+        }
+      }
+    )
   }
       
 

@@ -11,7 +11,13 @@
         </div>
         <div class="form-group">
             <button class="btn btn-primary" (click)="login()">Login</button>
+            <button class="btn btn-success inline" (click)="loginGoogle()" >Google</button>
+            <button class="btn btn-secondary inline" (click)="logoutGoogle()" >LogoutGoogle</button>
+            <button type="button" (click)="token()">02 Token</button>
+
+
         </div>
+
         <div class="alert-danger">{{msglogin}}</div>
     </form>
 </div>
